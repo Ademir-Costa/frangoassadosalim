@@ -1,5 +1,4 @@
 {% extends "base.html" %}
-
 {% block content %}
 <div class="card">
     <div class="card-header bg-primary text-white">
@@ -11,7 +10,6 @@
             <hr>
             <p class="mb-0">Status: {{ pedido.status }}</p>
         </div>
-
         <div class="row">
             <div class="col-md-6">
                 <h5>Detalhes da Retirada:</h5>
@@ -32,25 +30,21 @@
                 <div class="list-group mb-3">
                     {% if pedido.itens %}
                         {% for item in pedido.itens %}
-                    
-                    <div class="list-group-item">
-                        <div class="d-flex justify-content-between">
-                            <span>{{ item.produto.nome }}</span>
-                            <span>{{ item.quantidade }}x R$ {{ "%.2f"|format(item.preco_unitario) }}</span>
-                        </div>
-                        <small class="text-muted">Subtotal: R$ {{ "%.2f"|format(item.quantidade * item.preco_unitario) }}</small>
-                    </div>
-                    {% endfor %}
-                        {% else %}
+                            <div class="list-group-item">
+                                <div class="d-flex justify-content-between">
+                                    <span>{{ item.produto.nome }}</span>
+                                    <span>{{ item.quantidade }}x R$ {{ "%.2f"|format(item.preco_unitario) }}</span>
+                                </div>
+                                <small class="text-muted">Subtotal: R$ {{ "%.2f"|format(item.quantidade * item.preco_unitario) }}</small>
+                            </div>
+                        {% endfor %}
+                    {% else %}
                         <div class="list-group-item text-muted">
                             Nenhum item encontrado neste pedido.
                         </div>
                     {% endif %}
                 </div>
 
-
-                </div>
-                
                 <div class="bg-light p-3 rounded">
                     <div class="d-flex justify-content-between fw-bold">
                         <span>Taxa de Entrega:</span>
@@ -58,7 +52,7 @@
                     </div>
                     <div class="d-flex justify-content-between fw-bold mt-2">
                         <span>Total:</span>
-                        <span>R$ {{ "%.2f"|format(pedido.total) }}</span>
+                        <span>R$ {{ "%.2f"|format(pedido.total + pedido.taxa_entrega) }}</span>
                     </div>
                 </div>
             </div>

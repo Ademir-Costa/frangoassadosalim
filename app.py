@@ -94,6 +94,8 @@ class ItemPedido(db.Model):
     pedido = db.relationship('Pedido', backref=db.backref('itens', lazy='joined'))
     produto = db.relationship('Produto', backref='itens_pedido', lazy='joined')
     
+    
+    
 class Produto(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     nome = db.Column(db.String(100), nullable=False)
@@ -353,7 +355,7 @@ def acompanhamento():
         Pedido.query
         .filter_by(usuario_id=current_user.id)
         .options(
-            db.joinedload(Pedido.itens).joinedload(ItemPedido.produto)  # Carrega itens e produtos
+            db.joinedload(Pedido.itens).joinedload(ItemPedido.produto) 
         )
         .order_by(Pedido.data_pedido.desc())
         .first()
@@ -389,9 +391,9 @@ def carrinho():
                 usuario_id=current_user.id,
                 local_retirada=local_retirada,
                 data_retirada=data_retirada,
-                taxa_entrega=10.0 if local_retirada == 'frangolandia' else 0.0,
+                taxa_entrega=10.0 if local_retirada == 'Entrega na Residencia' else 0.0,
                 total=0.0,
-                status='Recebido'
+                status='Em preparação'
             )
             db.session.add(pedido)
             db.session.flush()  # Gera o ID do pedido sem commit
@@ -512,5 +514,5 @@ with app.app_context():
 if __name__ == '__main__':
    app.run(debug=True)
     
-   # port = int(os.environ.get("PORT", 8080))
-   # app.run(host="0.0.0.0", port=port)
+    #port = int(os.environ.get("PORT", 8080))
+    #app.run(host="0.0.0.0", port=port)

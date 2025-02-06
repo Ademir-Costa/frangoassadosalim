@@ -10,15 +10,13 @@
 <body class="bg-light">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
-            <a class="navbar-brand" href="{{ url_for('index') }}">Sistema Pedidos</a>
-            <a class="navbar-brand" href="{{ url_for('acompanhamento') }}">Acompanhamento</a>
-            <a class="navbar-brand" href="{{ url_for('admin_usuarios') }}">Administrar Usuários</a>
-
-
+            
 
             <div class="collapse navbar-collapse">
-                <ul class="navbar-nav ms-auto">                
-
+                <ul class="navbar-nav ms-auto"> 
+                    <a class="navbar-brand" href="{{ url_for('index') }}">Sistema Pedidos</a>
+                    <a class="navbar-brand" href="{{ url_for('acompanhamento') }}">Acompanhamento</a>
+                    <a class="navbar-brand" href="{{ url_for('cadastro') }}">Cadastrar</a>               
 
 
                     {% if current_user.is_authenticated %}

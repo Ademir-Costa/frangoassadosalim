@@ -1,5 +1,4 @@
 {% extends "base.html" %}
-
 {% block content %}
 <div class="container">
     <div class="card shadow-lg">
@@ -8,7 +7,6 @@
         </div>
         
         <div class="card-body">
-        
             <form method="POST" id="form-pedido" onsubmit="return validarCarrinho()">
                 <!-- Listagem de Produtos DEVE estar dentro do formulário -->
                 <div class="row g-4 mb-4" id="produtos-container">
@@ -47,15 +45,14 @@
                     </div>
                     {% endfor %}
                 </div>
-
                 
                 <div class="row g-3">
                     <div class="col-md-6">
                         <label class="form-label">Local de Retirada*</label>
                         <select class="form-select" name="local_retirada" id="local-retirada" required>
                             <option value="" disabled selected>Selecione...</option>
-                            <option value="frangolandia">Entrega (Taxa R$ 10,00)</option>
-                            <option value="loja_centro">Frangolandia do Salim (Sem Taxa)</option>
+                            <option value="Entregar no Endereço">Entrega no Endereço (Taxa R$ 10,00)</option>
+                            <option value="Retirar na Frangolandia">Frangolandia do Salim (Sem Taxa)</option>
                         </select>
                     </div>
                     
@@ -69,7 +66,6 @@
                                required>
                     </div>
                 </div>
-
                 <!-- Resumo do Pedido -->
                 <div class="card mt-4 bg-light">
                     <div class="card-body">
@@ -83,12 +79,11 @@
                         <div class="mt-3">
                             <div class="d-flex justify-content-between">
                                 <span>Taxa de Entrega:</span>
-                                <span id="taxa-entrega">R$ 0,00</span>
+                                <span id="taxa-entrega">R$ 10,00</span>
                             </div>
                         </div>
                     </div>
                 </div>
-
                 <button type="submit" class="btn btn-success btn-lg w-100 mt-4">
                     <i class="bi bi-check-circle"></i> Confirmar Pedido
                 </button>
@@ -96,8 +91,62 @@
         </div>
     </div>
 </div>
-
 <script>
+document.addEventListener('DOMContentLoaded', function () {
+    const inputsQuantidade = document.querySelectorAll('.produto-quantidade');
+    const resumoItens = document.getElementById('resumo-itens');
+    const totalPedido = document.getElementById('total-pedido');
+    const taxaEntrega = document.getElementById('taxa-entrega');
+    const localRetirada = document.getElementById('local-retirada');
 
+    // Função para calcular o total do pedido
+    function calcularTotal() {
+        let total = 0;
+        resumoItens.innerHTML = ''; // Limpa o resumo
+
+        inputsQuantidade.forEach(input => {
+            const quantidade = parseInt(input.value);
+            const preco = parseFloat(input.dataset.produtoPreco);
+            const nome = input.closest('.card-body').querySelector('.card-title').textContent;
+
+            if (quantidade > 0) {
+                const subtotal = quantidade * preco;
+                total += subtotal;
+
+                // Adiciona o item ao resumo
+                const listItem = document.createElement('li');
+                listItem.className = 'list-group-item';
+                listItem.textContent = `${quantidade}x ${nome} + R$ ${subtotal.toFixed(2)}`;
+                resumoItens.appendChild(listItem);
+            }
+        });
+
+        // Calcula a taxa de entrega
+        const taxa = localRetirada.value === 'Entregar no Endereço' ? 10 : 0;
+        total += taxa;
+
+        // Atualiza o total do pedido e a taxa de entrega
+        totalPedido.textContent = `R$ ${total.toFixed(2)}`;
+        taxaEntrega.textContent = `R$ ${taxa.toFixed(2)}`;
+
+        // Se nenhum item estiver selecionado, mostra mensagem padrão
+        if (resumoItens.children.length === 0) {
+            const listItem = document.createElement('li');
+            listItem.className = 'list-group-item text-muted';
+            listItem.textContent = 'Nenhum item selecionado';
+            resumoItens.appendChild(listItem);
+        }
+    }
+
+    // Event listeners para atualizar o total quando a quantidade ou local de retirada mudar
+    inputsQuantidade.forEach(input => {
+        input.addEventListener('input', calcularTotal);
+    });
+
+    localRetirada.addEventListener('change', calcularTotal);
+
+    // Inicializa o cálculo ao carregar a página
+    calcularTotal();
+});
 </script>
 {% endblock %}

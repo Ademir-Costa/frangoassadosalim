@@ -1,0 +1,136 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card mx-auto" style="max-width: 600px;">
+    <div class="card-header bg-primary text-white">
+        <h4>Cadastro de Usuário</h4>
+    </div>
+    <div class="card-body">
+        <form method="POST">
+            
+            <div class="mb-3">
+                <label class="form-label">Nome</label>
+                <input type="text" class="form-control" name="nome">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">E-mail*</label>
+                <input type="email" class="form-control" name="email" required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Celular*</label>
+                <input type="tel" class="form-control" name="celular" required>
+            </div>
+            <div class="mb-8">
+                <label class="form-label">Senha*</label>
+                <input type="password" class="form-control" name="senha" required>
+            </div
+
+               <div class="card-body">
+        <form method="POST">
+                    
+            <!-- Campo CEP com integração ViaCEP -->
+            <div class="col-md-4">
+                <label class="form-label">CEP*</label>
+                <input type="text" 
+                       class="form-control" 
+                       name="cep" 
+                       id="cep"
+                       required
+                       onblur="buscarEndereco(this.value)"
+                       maxlength="9"
+                       pattern="\d{5}-?\d{3}"
+                       placeholder="00000-000">
+                <small class="text-muted" id="cep-helper">Digite o CEP</small>
+            </div>
+
+            <!-- Campos de endereço com IDs -->
+            <div class="col-md-8">
+                <label class="form-label">Logradouro*</label>
+                <input type="text" class="form-control" name="logradouro" id="logradouro" required>
+            </div>
+            <div class="row g-2">
+                <div class="col-6">
+                    <label class="form-label">Número*</label>
+                    <input type="text" class="form-control" name="numero" id="numero" required>
+                </div>
+                <div class="col-6">
+                    <label class="form-label">Bairro*</label>
+                    <input type="text" class="form-control" name="bairro" id="bairro" required>
+                </div>
+            </div>
+            
+            <div class="row g-2 mt-2">
+                <div class="col-8">
+                    <label class="form-label">Cidade*</label>
+                    <input type="text" class="form-control" name="cidade" id="cidade" required>
+                </div>
+                <div class="col-4">
+                    <label class="form-label">UF*</label>
+                    <input type="text" class="form-control" name="estado" id="uf" required>
+                </div>
+            </div>
+        </div>
+    </div>
+       <center> <button type="submit" class="btn btn-primary">Cadastrar</button> </center>
+    </div>
+</form>
+</div>
+</div>
+</div>
+
+<!-- Script ViaCEP -->
+<script>
+function buscarEndereco(cep) {
+    // Limpar mensagens e formatar CEP
+    const cepLimpo = cep.replace(/\D/g, '');
+    const url = `https://viacep.com.br/ws/${cepLimpo}/json/`;
+    const cepHelper = document.getElementById('cep-helper');
+
+    // Validação básica
+    if (cepLimpo.length !== 8) {
+        cepHelper.textContent = "CEP inválido!";
+        cepHelper.classList.add('text-danger');
+        return;
+    }
+
+    // Buscar dados na API
+    fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            if (data.erro) {
+                throw new Error('CEP não encontrado');
+            }
+            
+            // Preencher campos
+            document.getElementById('logradouro').value = data.logradouro || '';
+            document.getElementById('bairro').value = data.bairro || '';
+            document.getElementById('cidade').value = data.localidade || '';
+            document.getElementById('uf').value = data.uf || '';
+            cepHelper.textContent = "CEP válido!";
+            cepHelper.classList.remove('text-danger');
+            cepHelper.classList.add('text-success');
+        })
+        .catch(error => {
+            // Limpar campos em caso de erro
+            document.getElementById('logradouro').value = '';
+            document.getElementById('bairro').value = '';
+            document.getElementById('cidade').value = '';
+            document.getElementById('uf').value = '';
+            cepHelper.textContent = error.message;
+            cepHelper.classList.add('text-danger');
+        });
+}
+
+// Máscara para CEP
+document.getElementById('cep').addEventListener('input', function(e) {
+    let value = e.target.value.replace(/\D/g, '');
+    if (value.length > 5) {
+        value = value.replace(/^(\d{5})(\d{3}).*/, '$1-$2');
+    }
+    e.target.value = value;
+});
+</script>
+{% endblock %}
+        </form>
+    </div>
+</div>

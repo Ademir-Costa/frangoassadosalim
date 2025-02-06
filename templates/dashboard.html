@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <h2 class="mb-4"><i class="bi bi-clipboard-data"></i> Dashboard Administrativa</h2>
+    
+    <div class="card shadow-lg">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0"><i class="bi bi-cart-check"></i> Todos os Pedidos</h5>
+        </div>
+        
+        <div class="card-body">
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                {% for pedido in pedidos %}
+                <div class="col">
+                    <div class="card h-100 border-info">
+                        <div class="card-header bg-light">
+                            <h6 class="mb-0">
+                                Pedido #{{ pedido.id }}
+                                <span class="badge bg-{{ 'success' if pedido.status == 'Entregue' else 'warning' }} float-end">
+                                    {{ pedido.status }}
+                                </span>
+                            </h6>
+                        </div>
+                        
+                        <div class="card-body">
+                            <!-- Dados do Cliente -->
+                            <div class="mb-3">
+                                <h6><i class="bi bi-person"></i> Cliente:</h6>
+                                <ul class="list-unstyled">
+                                    <li>Nome: {{ pedido.usuario.nome }}</li>
+                                    <li>ID: {{ pedido.usuario.id }}</li>
+                                    <li>Contato: {{ pedido.usuario.email }}</li>
+                                </ul>
+                            </div>
+
+                            <!-- Detalhes do Pedido -->
+                            <div class="mb-3">
+                                <h6><i class="bi bi-receipt"></i> Detalhes:</h6>
+                                <ul class="list-unstyled">
+                                    <li>Data Pedido: {{ pedido.data_pedido.strftime('%d/%m/%Y %H:%M') }}</li>
+                                    <li>Retirada: {{ pedido.local_retirada }}</li>
+                                    <li>Data Retirada: {{ pedido.data_retirada.strftime('%d/%m/%Y %H:%M') }}</li>
+                                </ul>
+                            </div>
+
+                            <!-- Itens do Pedido -->
+                            <div class="mb-3">
+                                <h6><i class="bi bi-list-ul"></i> Itens:</h6>
+                                <ul class="list-group list-group-flush">
+                                    {% for item in pedido.itens %}
+                                    <li class="list-group-item d-flex justify-content-between">
+                                        <span>{{ item.produto.nome }} (x{{ item.quantidade }})</span>
+                                        <span>R$ {{ "%.2f"|format(item.preco_unitario * item.quantidade) }}</span>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+
+                            <!-- Total -->
+                            <div class="alert alert-success mb-0">
+                                <div class="d-flex justify-content-between">
+                                    <span>Total:</span>
+                                    <strong>R$ {{ "%.2f"|format(pedido.total) }}</strong>
+                                </div>
+                                <small class="text-muted">(Taxa: R$ {{ "%.2f"|format(pedido.taxa_entrega) }})</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% else %}
+                <div class="col-12 text-center py-5">
+                    <h5 class="text-muted">Nenhum pedido encontrado</h5>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

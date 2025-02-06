@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <div class="card shadow-lg">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0"><i class="bi bi-cart4"></i> Seu Carrinho</h4>
+        </div>
+        
+        <div class="card-body">
+        
+            <form method="POST" id="form-pedido" onsubmit="return validarCarrinho()">
+                <!-- Listagem de Produtos DEVE estar dentro do formulário -->
+                <div class="row g-4 mb-4" id="produtos-container">
+                    {% for produto in produtos %}
+                    <div class="col-md-4">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ produto.nome }}</h5>
+                                {% if produto.descricao %}
+                                <p class="card-text text-muted">{{ produto.descricao }}</p>
+                                {% endif %}
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span class="h5 text-success">R$ {{ "%.2f"|format(produto.preco) }}</span>
+                                    <div class="input-group" style="width: 120px;">
+                                        <input type="number" 
+                                            class="form-control produto-quantidade" 
+                                            name="produto_{{ produto.id }}"  
+                                            data-produto-id="{{ produto.id }}" 
+                                            data-produto-preco="{{ produto.preco }}" 
+                                            data-produto-estoque="{{ produto.estoque }}"
+                                            min="0" 
+                                            max="{{ produto.estoque }}"
+                                            value="0"
+                                            required> 
+                                    </div>
+                                </div>
+                                <small class="text-muted d-block mt-2">
+                                    Estoque: {{ produto.estoque }} unidade(s)
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                    {% else %}
+                    <div class="col-12 text-center py-5">
+                        <h5 class="text-muted">Nenhum produto disponível no momento.</h5>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Local de Retirada*</label>
+                        <select class="form-select" name="local_retirada" id="local-retirada" required>
+                            <option value="" disabled selected>Selecione...</option>
+                            <option value="frangolandia">Entrega (Taxa R$ 10,00)</option>
+                            <option value="loja_centro">Frangolandia do Salim (Sem Taxa)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <label class="form-label">Data/Horário de Retirada*</label>
+                        <input type="datetime-local" 
+                               class="form-control" 
+                               name="data_retirada" 
+                               id="data-retirada"
+                               min="{{ min_date }}"
+                               required>
+                    </div>
+                </div>
+
+                <!-- Resumo do Pedido -->
+                <div class="card mt-4 bg-light">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h5 class="mb-0">Resumo do Pedido</h5>
+                            <h4 class="mb-0 text-primary" id="total-pedido">R$ 0,00</h4>
+                        </div>
+                        <ul class="list-group list-group-flush" id="resumo-itens">
+                            <li class="list-group-item text-muted">Nenhum item selecionado</li>
+                        </ul>
+                        <div class="mt-3">
+                            <div class="d-flex justify-content-between">
+                                <span>Taxa de Entrega:</span>
+                                <span id="taxa-entrega">R$ 0,00</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-success btn-lg w-100 mt-4">
+                    <i class="bi bi-check-circle"></i> Confirmar Pedido
+                </button>
+            </form> 
+        </div>
+    </div>
+</div>
+
+<script>
+
+</script>
+{% endblock %}

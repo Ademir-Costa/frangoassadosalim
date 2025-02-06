@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">Lista de Usuários</h2>
+    
+    <div class="table-responsive">
+        <table class="table table-striped table-hover align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Nome</th>
+                    <th scope="col">Celular</th>
+                    <th scope="col">E-mail</th>
+                    <th scope="col">Admin</th>
+                    <th scope="col">Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for usuario in usuarios %}
+                <tr>
+                    <td>{{ usuario.id }}</td>
+                    <td>{{ usuario.nome if usuario.nome else 'N/A' }}</td>
+                    <td>{{ usuario.celular }}</td>
+                    <td>{{ usuario.email }}</td>
+                    <td>
+                        {% if usuario.is_admin %}
+                            <span class="badge bg-success">Sim</span>
+                        {% else %}
+                            <span class="badge bg-secondary">Não</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <div class="d-flex gap-2">
+                            <a href="{{ url_for('tornar_admin', user_id=usuario.id) }}" 
+                               class="btn btn-sm btn-warning" 
+                               title="Tornar Admin">
+                                <i class="bi bi-person-gear"></i>
+                            </a>
+                            <button class="btn btn-sm btn-info" 
+                                    data-bs-toggle="modal" 
+                                    data-bs-target="#detalhesUsuario{{ usuario.id }}"
+                                    title="Ver Detalhes">
+                                <i class="bi bi-eye"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                
+                <!-- Modal de Detalhes -->
+                <div class="modal fade" id="detalhesUsuario{{ usuario.id }}" tabindex="-1">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Detalhes do Usuário</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                                <dl class="row">
+                                    <dt class="col-sm-4">Data de Registro:</dt>
+                                    <dd class="col-sm-8">{{ usuario.data_registro.strftime('%d/%m/%Y %H:%M') }}</dd>
+                                    
+                                    <dt class="col-sm-4">Endereço:</dt>
+                                    <dd class="col-sm-8">
+                                        {{ usuario.logradouro }}, {{ usuario.numero }}<br>
+                                        {{ usuario.bairro }} - {{ usuario.cidade }}/{{ usuario.estado }}<br>
+                                        CEP: {{ usuario.cep }}
+                                    </dd>
+                                </dl>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

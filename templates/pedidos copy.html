@@ -29,13 +29,18 @@
                                 <h6><i class="bi bi-person"></i> Cliente:</h6>
                                 <ul class="list-unstyled">
                                     <li>Nome: {{ pedido.usuario.nome }}</li>
-                                    
-                                    <li>Contato: {{ pedido.usuario.celular}}</li>
+                                    <li>Contato: 
+                                        <a href="https://wa.me/+55{{ pedido.usuario.celular }}?text=Olá, {{ pedido.usuario.nome }}! Segue detalhes do seu pedido:%0A%0A*Pedido #{{ pedido.id }}*%0A*Itens:*%0A{% for item in pedido.itens %}- {{ item.produto.nome }} (x{{ item.quantidade }}) - R$ {{ "%.2f"|format(item.preco_unitario * item.quantidade) }}%0A{% endfor %}%0A*Total:* R$ {{ "%.2f"|format(pedido.total) }}%0A*Taxa de entrega:* R$ {{ "%.2f"|format(pedido.taxa_entrega) }}%0A*Status:* {{ pedido.status }}" 
+                                           target="_blank" 
+                                           class="btn btn-success btn-sm">
+                                            <i class="bi bi-whatsapp"></i> Enviar WhatsApp
+                                        </a>
+                                    </li>
                                 </ul>
                             </div>
 
-                            <!-- Detalhes do Pedido (com fundo verde) -->
-                            <div class="mb-3 p-3 btn btn-secondary" text-white rounded">
+                            <!-- Detalhes do Pedido -->
+                            <div class="mb-3 p-3 bg-success text-white rounded">
                                 <h6><i class="bi bi-receipt"></i> Detalhes:</h6>
                                 <ul class="list-unstyled">
                                     <li>Data Pedido: {{ pedido.data_pedido.strftime('%d/%m/%Y %H:%M') }}</li>
@@ -64,6 +69,22 @@
                                     <strong>R$ {{ "%.2f"|format(pedido.total) }}</strong>
                                 </div>
                                 <small class="text-muted">(Taxa: R$ {{ "%.2f"|format(pedido.taxa_entrega) }})</small>
+                            </div>
+
+                            <!-- Botão para Alterar Status -->
+                            <div class="mt-3">
+                                <form action="{{ url_for('alterar_status_pedido', pedido_id=pedido.id) }}" method="POST">
+                                    <div class="input-group">
+                                        <select name="novo_status" class="form-select">
+                                            <option value="Pendente" {% if pedido.status == 'Pendente' %}selected{% endif %}>Pendente</option>
+                                            <option value="Em andamento" {% if pedido.status == 'Em andamento' %}selected{% endif %}>Em andamento</option>
+                                            <option value="Entregue" {% if pedido.status == 'Entregue' %}selected{% endif %}>Entregue</option>
+                                        </select>
+                                        <button type="submit" class="btn btn-primary">
+                                            <i class="bi bi-arrow-repeat"></i> Atualizar Status
+                                        </button>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                     </div>

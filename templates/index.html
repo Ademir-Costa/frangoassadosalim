@@ -1,68 +1,80 @@
-{% extends "base.html" %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Sistema de Pedidos{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+</head>
+<body class="bg-light">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            
 
-{% block content %}
-<div class="container my-5">
-    <!-- Seção de Produtos -->
-    {% if produtos %}
-    <div class="card shadow-lg mb-4">
-        <div class="card-header bg-info text-white">
-            <h3 class="mb-0"><i class="bi bi-box-seam"></i> Produtos Disponíveis</h3>
-        </div>
-        
-        <div class="card-body">
-            <div class="row g-4">
-                {% for produto in produtos %}
-                <div class="col-md-4">
-                    <div class="card h-100 border-success">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ produto.nome }}</h5>
-                            
-                            {% if produto.descricao %}
-                            <p class="card-text text-muted small">{{ produto.descricao }}</p>
-                            {% endif %}
-                            
-                            <div class="d-flex justify-content-between align-items-center mb-3">
-                                <span class="h4 text-success">R$ {{ "%.2f"|format(produto.preco) }}</span>
-                                <span class="badge bg-primary py-2">
-                                    <i class="bi bi-box"></i> {{ produto.estoque }} em estoque
-                                </span>
-                            </div>
-                            
-                            <a href="{{ url_for('login') if not current_user.is_authenticated else url_for('carrinho') }}" 
-                               class="btn btn-success w-100">
-                               <i class="bi bi-cart-plus"></i> Comprar
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                {% endfor %}
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav ms-auto"> 
+                    <a class="navbar-brand" href="{{ url_for('index') }}">Inicio</a>
+                    <a class="navbar-brand" href="{{ url_for('carrinho') }}">Pedido</a>
+                    <a class="navbar-brand" href="{{ url_for('acompanhamento') }}">Acompanhamento</a>
+                    <a class="navbar-brand" href="{{ url_for('cadastro') }}">Cadastrar</a>  
+                    <a class="navbar-brand" href="{{ url_for('login') }}">Entrar</a>             
+
+                                   
+                </ul>
             </div>
         </div>
-    </div>
-    {% else %}
-    <div class="alert alert-warning text-center">
-        <h4 class="alert-heading"><i class="bi bi-exclamation-triangle"></i> Estoque Vazio</h4>
-        <p>Nenhum produto disponível no momento. Volte mais tarde!</p>
-    </div>
-    {% endif %}
+    </nav>
 
-    <!-- Seção de Login para não autenticados -->
-    {% if not current_user.is_authenticated %}
-    <div class="card border-primary">
-        <div class="card-body text-center">
-            <h5 class="card-title text-primary mb-3">
-                <i class="bi bi-lock"></i> Área do Cliente
-            </h5>
-            <div class="d-grid gap-2 d-md-block">
-                <a href="{{ url_for('login') }}" class="btn btn-primary btn-lg">
-                    <i class="bi bi-box-arrow-in-right"></i> Login
-                </a>
-                <a href="{{ url_for('cadastro') }}" class="btn btn-outline-primary btn-lg">
-                    <i class="bi bi-person-plus"></i> Cadastre-se
-                </a>
-            </div>
-        </div>
+    <img src="./static/imagens/familia_reunida.png" alt="frango assado" width="350" height="400">
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+  
+</body>
+<footer>
+    <center>
+    <p>&copy; Frango Assado do Salim</p>
+    <p> Telefone Fixo: 67 3241-5969 </P
+
+    <!-- Link para o WhatsApp -->
+    <a href="https://wa.me/+5567999344814" target="_blank">
+        <button style="padding: 5px 10px; font-size: 16px; background-color: rgb(17, 226, 31); color: white; border: none; border-radius: 5px; cursor: pointer;">
+            Enviar WhatsApp
+        </button>
+    </a>
+
+    <p>Rua Roberto Scaff 761, Aquidauana, MS, 79200-000</p>
+
+    <!-- Botão para abrir o Google Maps -->
+   
+    <a href="https://maps.app.goo.gl/ccnmCcJQ5WkXRnye9" target="_blank">
+        <button style="padding: 5px 10px; font-size: 16px; background-color: #4285F4; color: white; border: none; border-radius: 5px; cursor: pointer;">
+            Abrir no Google Maps
+        </button>
+    </a>
+    <div class="apresentacao__links">
+        <p>
+
+        </P>
+
+        <strong class="apresentacao__links__subtitulo">Desenvolvedor:</strong><p>
+
+        <a class="apresentacao__links__navegacao" href="https://github.com/Ademir-Costa">
+            <img src="/static/imagens/github.png">
+            Github
+        </a>
+        <a class="apresentacao__links__navegacao" href="https://linkedin.com/in/ademir-cardoso-costa-2b390b26">
+            <img src="/static/imagens/linkedin.png">
+            linkedin
+        </a>
+        <a class="apresentacao__links__navegacao" href="mailto:ademircosta.40@hotmail.com">
+            <img src="">
+            e-mail
+        </a>
     </div>
-    {% endif %}
-</div>
-{% endblock %}
+
+</center>
+</footer>
+
+</body>
+</html>

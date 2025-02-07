@@ -10,6 +10,7 @@
             <form method="POST" id="form-pedido" onsubmit="return validarCarrinho()">
                 <!-- Listagem de Produtos DEVE estar dentro do formulário -->
                 <div class="row g-4 mb-4" id="produtos-container">
+                 
                     {% for produto in produtos %}
                     <div class="col-md-4">
                         <div class="card h-100">
@@ -17,6 +18,7 @@
                                 <h5 class="card-title">{{ produto.nome }}</h5>
                                 {% if produto.descricao %}
                                 <p class="card-text text-muted">{{ produto.descricao }}</p>
+                                
                                 {% endif %}
                                 <div class="d-flex justify-content-between align-items-center">
                                     <span class="h5 text-success">R$ {{ "%.2f"|format(produto.preco) }}</span>
@@ -82,6 +84,7 @@
                                 <span id="taxa-entrega">R$ 10,00</span>
                             </div>
                         </div>
+                        <img src="./static/imagens/frango_assado.png" alt="frango assado" style="width:15%;height:15%;">
                     </div>
                 </div>
                 <button type="submit" class="btn btn-success btn-lg w-100 mt-4">
